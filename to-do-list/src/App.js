@@ -1,15 +1,13 @@
 import './App.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-  faCircleCheck, faPen, faTrashCan
-} from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faPen, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 
 function App() {
 
   // task (todo list) state
   const [todo, setTodo] = useState([
-    {"id":1, "title": "Task 1", "status": true}, // jika true berarti tugas selesai dan jika false sebaliknya
+    {"id":1, "title": "Task 1", "status": false}, // jika true berarti tugas selesai dan jika false sebaliknya
     {"id":2, "title": "Task 2", "status": false},
   ]);
 
@@ -67,10 +65,23 @@ function App() {
             return (
               <React.Fragment key={task.id}>
                   <div className='flex flex-wrap bg-emerald-700 shadow-lg shadow-indigo-500/40 rounded-xl mb-3 px-4 py-3 text-left text-lg relative mx-auto max-w-sm'>
-                    {/* jika status nya sama dengan done maka coret text nya */}
+
+                    {/* jika status nya sama dengan done maka coret text nya */}    
                     <div className={task.status ? 'done' : ''}>
                       <span className=' inline-block border-solid border-2 rounded-full border-slate-300 w-[25px] h-[25px] text-white text-center mr-[8px] mb-2 text-sm'>{index + 1}</span>
                       <span className='taskText text-white '>{task.title}</span>
+                    </div>
+
+                    <div className='ml-auto cursor-pointer'>
+                      <span className='mr-2 text-green-500 hover:text-green-600'>
+                        <FontAwesomeIcon icon={faCircleCheck}></FontAwesomeIcon>
+                      </span>
+                      <span className='mr-2 text-yellow-500 hover:text-yellow-600'>
+                        <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                      </span>
+                      <span className='mr-2 text-red-500 hover:text-red-600'>
+                        <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
+                      </span>
                     </div>
                   </div>
 

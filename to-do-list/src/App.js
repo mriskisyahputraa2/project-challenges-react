@@ -53,7 +53,7 @@ function App() {
   return (
     <>
       <div className='App'>
-        <h1 className='text-center text-3xl font-roboto font-medium text-white my-12'>To Do List</h1>
+        <h1 className='text-center font-roboto text-7xl font-extrabold text-amber-300 drop-shadow-lg my-12 uppercase'>To Do List</h1>
 
 
       {/* Display Todos */}

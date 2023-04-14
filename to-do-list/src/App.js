@@ -9,10 +9,7 @@ import React, { useState } from "react";
 
 function App() {
   // task (todo list) state
-  const [todo, setTodo] = useState([
-    { id: 2, title: "Task 2", status: false },
-    { id: 1, title: "Task 1", status: false }, // jika true berarti tugas selesai dan jika false sebaliknya
-  ]);
+  const [todo, setTodo] = useState([]);
 
   // temp task / tugas data sementara
   const [newTask, setNewTask] = useState(""); // digunakan untuk menyimpan data sementara yang ditambahkan user
@@ -26,7 +23,7 @@ function App() {
       let num = todo.length + 1; // maka + id nya data nya simpan dalam num
       let newEntry = { id: num, title: newTask, status: false }; // then data masuk, id menjadi num, title menjadi newTask and status menjadi false supaya datanya tidak ke complate
       setTodo([...todo, newEntry]); // newEntry sudah ada data, dan data tsb disimpan oleh v-todo didalam setTodo
-      setNewTask(''); // jika sudah tampil hilangkan data yang dimasukkan didalamn input
+      setNewTask(""); // jika sudah tampil hilangkan data yang dimasukkan didalamn input
     }
   };
 
@@ -38,23 +35,40 @@ function App() {
 
   // Mark task as done or completed / menandai tugas sudah complit
   const completedTask = (id) => {
-    let newTask = todo.map(task => {
-      if(task.id === id){
-        return ({...task, status: !task.status})
+    let newTask = todo.map((task) => {
+      // mengambil data array dari todo
+      if (task.id === id) {
+        // jika task.id sama dengan id dari array
+        return { ...task, status: !task.status }; // maka kembalikan object task menjadi complate jika status true menjadi false begitu pun sebalikanya
       }
       return task;
-    })
+    });
     setTodo(newTask);
   };
 
   // Cancel Update
-  const cancelUpdate = () => {};
+  const cancelUpdate = () => {
+    setUpdateData("");
+  };
 
   // Change task for Update
-  const changeTask = (e) => {};
+  const changeTask = (e) => {
+    // menyimpan objek data untuk digunakan mengupdate data
+    let newEntry = {
+      id: updateData.id, // sesuai dengan id
+      title: e.target.value, // title sesuai dengan yang di ketikkan oleh user todo
+      status: updateData.status ? true : false, // jika data nya true maka akan true begitupun sebaliknya
+    };
+    setUpdateData(newEntry);
+  };
 
   // Update task
-  const UpdateTask = () => {};
+  const UpdateTask = () => {
+    let filterRecords = [...todo].filter((task) => task.id !== updateData.id); // mengmbil semua data dari todo dan mengfilter task id tidak sama dengan update id maka
+    let updateObject = [...filterRecords, updateData]; // updateObject nya darai data todo yang sudah tersimpan di filterRecords dari v-updateData
+    setTodo(updateObject); // data updateObject di simpat ke setTodo
+    setUpdateData(""); // jika berhasil maka input akan kosong dengan tanda ''
+  };
 
   return (
     <>
@@ -64,37 +78,59 @@ function App() {
           To Do List
         </h1>
         {/* end judul */}
-       
-       
-        {/* update task */}
-          <div> 
-            <input 
-              className=" rounded-lg p-2 mb-3 w-[22rem] mr-2"
-              type="text"
-              placeholder="Update Task..."
-            />
-            <button className="bg-green-500 hover:bg-green-600 hover:text-white p-2 rounded-lg mr-2">Update</button>
-            <button className="bg-yellow-500 hover:bg-yellow-600 hover:text-white p-2 rounded-lg">Cancel</button>
-          </div>
-
-        {/* end update task */}
 
 
-        {/* Add Task */}
-           <div> 
-            <input 
-              onChange={(e) => setNewTask(e.target.value)}
-              value={newTask}
-              className=" rounded-lg p-2 mb-3 w-[25rem] mr-2"
-              type="text"
-              placeholder="Add Task..."
-            />
-            <button 
-              onClick={addTask}
-              className="bg-green-500 hover:bg-green-600 hover:text-white px-6 py-2 rounded-lg mr-4">Add</button>
-          </div>
-        {/* end add task */}
+        {/* jika user ingin update data maka */}
+        {updateData && updateData ? (
+          <>
+          {/* akan manampilkan input update data beserta data yang mau di update */}
+            {/* update task */}
+            <div>
+              <input
+                value={updateData && updateData.title}
+                onChange={(e) => changeTask(e)}
+                className=" rounded-lg p-2 mb-3 w-[22rem] mr-2"
+                type="text"
+                placeholder="Update Task..."
+              />
+              <button
+                onClick={UpdateTask}
+                className="bg-green-500 hover:bg-green-600 hover:text-white p-2 rounded-lg mr-2">
+                Update
+              </button>
+              <button 
+                onClick={cancelUpdate}
+                className="bg-yellow-500 hover:bg-yellow-600 hover:text-white p-2 rounded-lg">
+                Cancel
+              </button>
+            </div>
 
+            {/* end update task */}
+          </>
+
+          // jika user tidak mau update data maka
+        ) : (
+          <>
+
+          {/* akan menampilkan input add data ke user  */}
+            {/* Add Task */}
+            <div>
+              <input
+                onChange={(e) => setNewTask(e.target.value)}
+                value={newTask}
+                className=" rounded-lg p-2 mb-3 w-[24rem] mr-2"
+                type="text"
+                placeholder="Add Task..."
+              />
+              <button
+                onClick={addTask}
+                className="bg-green-500 hover:bg-green-600 hover:text-white px-10 py-2 rounded-lg ">
+                Add
+              </button>
+            </div>
+            {/* end add task */}
+          </>
+        )}
 
 
         {/* Display Todos */}
@@ -129,9 +165,8 @@ function App() {
 
                       {/* bagian button */}
                       <div className="ml-auto cursor-pointer">
-
                         {/* button complete */}
-                        <span 
+                        <span
                           onClick={(e) => completedTask(task.id)}
                           className="Completed / Not Completed mr-2 text-green-500 hover:text-green-600">
                           <FontAwesomeIcon
@@ -139,10 +174,16 @@ function App() {
                         </span>
                         {/* end button complete */}
 
-
                         {/* button edit */}
                         {task.status ? null : ( // jika task status complete maka hilangkan icons edit jadikan null
                           <span
+                            onClick={() =>
+                              setUpdateData({
+                                id: task.id,
+                                title: task.title,
+                                status: task.status ? true : false,
+                              })
+                            }
                             className="Edit mr-2 text-yellow-500 hover:text-yellow-600">
                             <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
                           </span>

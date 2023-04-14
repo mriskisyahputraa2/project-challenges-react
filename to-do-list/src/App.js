@@ -37,7 +37,15 @@ function App() {
   };
 
   // Mark task as done or completed / menandai tugas sudah complit
-  const completedTask = (id) => {};
+  const completedTask = (id) => {
+    let newTask = todo.map(task => {
+      if(task.id === id){
+        return ({...task, status: !task.status})
+      }
+      return task;
+    })
+    setTodo(newTask);
+  };
 
   // Cancel Update
   const cancelUpdate = () => {};
@@ -121,17 +129,24 @@ function App() {
 
                       {/* bagian button */}
                       <div className="ml-auto cursor-pointer">
+
                         {/* button complete */}
-                        <span className="Completed / Not Completed mr-2 text-green-500 hover:text-green-600">
+                        <span 
+                          onClick={(e) => completedTask(task.id)}
+                          className="Completed / Not Completed mr-2 text-green-500 hover:text-green-600">
                           <FontAwesomeIcon
                             icon={faCircleCheck}></FontAwesomeIcon>
                         </span>
                         {/* end button complete */}
 
+
                         {/* button edit */}
-                        <span className="Edit mr-2 text-yellow-500 hover:text-yellow-600">
-                          <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                        </span>
+                        {task.status ? null : ( // jika task status complete maka hilangkan icons edit jadikan null
+                          <span
+                            className="Edit mr-2 text-yellow-500 hover:text-yellow-600">
+                            <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                          </span>
+                        )}
                         {/* end button edit */}
 
                         {/* button delete */}

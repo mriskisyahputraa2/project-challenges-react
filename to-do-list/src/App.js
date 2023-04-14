@@ -1,11 +1,9 @@
 import "./App.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faPen,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+
 import React, { useState } from "react";
+import AddTodo from "./components/AddTodo";
+import UpdateTodo from "./components/UpdataTodo";
+import Todo from "./components/Todo";
 
 function App() {
   // task (todo list) state
@@ -85,25 +83,12 @@ function App() {
           <>
           {/* akan manampilkan input update data beserta data yang mau di update */}
             {/* update task */}
-            <div>
-              <input
-                value={updateData && updateData.title}
-                onChange={(e) => changeTask(e)}
-                className=" rounded-lg p-2 mb-3 w-[22rem] mr-2"
-                type="text"
-                placeholder="Update Task..."
-              />
-              <button
-                onClick={UpdateTask}
-                className="bg-green-500 hover:bg-green-600 hover:text-white p-2 rounded-lg mr-2">
-                Update
-              </button>
-              <button 
-                onClick={cancelUpdate}
-                className="bg-yellow-500 hover:bg-yellow-600 hover:text-white p-2 rounded-lg">
-                Cancel
-              </button>
-            </div>
+            <UpdateTodo
+            updateData={updateData}
+            changeTask={changeTask}
+            UpdateTask={UpdateTask}
+            cancelUpdate={cancelUpdate}
+            />
 
             {/* end update task */}
           </>
@@ -111,24 +96,12 @@ function App() {
           // jika user tidak mau update data maka
         ) : (
           <>
-
-          {/* akan menampilkan input add data ke user  */}
-            {/* Add Task */}
-            <div>
-              <input
-                onChange={(e) => setNewTask(e.target.value)}
-                value={newTask}
-                className=" rounded-lg p-2 mb-3 w-[24rem] mr-2"
-                type="text"
-                placeholder="Add Task..."
-              />
-              <button
-                onClick={addTask}
-                className="bg-green-500 hover:bg-green-600 hover:text-white px-10 py-2 rounded-lg ">
-                Add
-              </button>
-            </div>
-            {/* end add task */}
+            {/* add Todo */}
+            <AddTodo
+              setNewTask={setNewTask}
+              newTask={newTask}
+              addTask={addTask}
+            />
           </>
         )}
 
@@ -142,68 +115,12 @@ function App() {
           No Task....
         </p>
       )}
-      <div>
-        <div>
-          {todo &&
-            todo
-              .sort((a, b) => (a.id > b.id ? 1 : -1)) // sort digunakan mengurutkan data pada array sebelum di tampilkan supaya id data tidak ambur radur
-              .map((task, index) => {
-                // melooping array
-                return (
-                  <React.Fragment key={task.id}>
-                    <div className="flex flex-wrap bg-emerald-700 shadow-lg shadow-indigo-500/40 rounded-xl mb-3 px-4 py-3 text-left text-lg relative max-w-lg mx-auto">
-                      {/* jika status nya sama dengan done maka coret text nya */}
-                      <div className={task.status ? "done" : ""}>
-                        <span className=" inline-block border-solid border-2 rounded-full border-slate-300 w-[25px] h-[25px] text-white text-center mr-[8px] mb-2 text-sm">
-                          {index + 1}
-                        </span>
-                        <span className="taskText text-white ">
-                          {task.title}
-                        </span>
-                      </div>
-                      {/* end bagian data */}
-
-                      {/* bagian button */}
-                      <div className="ml-auto cursor-pointer">
-                        {/* button complete */}
-                        <span
-                          onClick={(e) => completedTask(task.id)}
-                          className="Completed / Not Completed mr-2 text-green-500 hover:text-green-600">
-                          <FontAwesomeIcon
-                            icon={faCircleCheck}></FontAwesomeIcon>
-                        </span>
-                        {/* end button complete */}
-
-                        {/* button edit */}
-                        {task.status ? null : ( // jika task status complete maka hilangkan icons edit jadikan null
-                          <span
-                            onClick={() =>
-                              setUpdateData({
-                                id: task.id,
-                                title: task.title,
-                                status: task.status ? true : false,
-                              })
-                            }
-                            className="Edit mr-2 text-yellow-500 hover:text-yellow-600">
-                            <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                          </span>
-                        )}
-                        {/* end button edit */}
-
-                        {/* button delete */}
-                        <span
-                          onClick={() => deleteTask(task.id)}
-                          className="Delete mr-2 text-red-500 hover:text-red-600">
-                          <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
-                        </span>
-                        {/* end button delete */}
-                      </div>
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-        </div>
-      </div>
+     <Todo
+     todo={todo}
+    completedTask={completedTask}
+     setUpdateData={setUpdateData}
+      deleteTask={deleteTask}
+     />
     </>
   );
 }

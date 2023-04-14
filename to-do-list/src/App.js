@@ -77,24 +77,22 @@ function App() {
         </h1>
         {/* end judul */}
 
-
         {/* jika user ingin update data maka */}
         {updateData && updateData ? (
           <>
-          {/* akan manampilkan input update data beserta data yang mau di update */}
+            {/* akan manampilkan input update data beserta data yang mau di update */}
             {/* update task */}
             <UpdateTodo
-            updateData={updateData}
-            changeTask={changeTask}
-            UpdateTask={UpdateTask}
-            cancelUpdate={cancelUpdate}
+              updateData={updateData}
+              changeTask={changeTask}
+              UpdateTask={UpdateTask}
+              cancelUpdate={cancelUpdate}
             />
 
             {/* end update task */}
           </>
-
-          // jika user tidak mau update data maka
         ) : (
+          // jika user tidak mau update data maka
           <>
             {/* add Todo */}
             <AddTodo
@@ -105,7 +103,6 @@ function App() {
           </>
         )}
 
-
         {/* Display Todos */}
       </div>
       {todo && todo.length ? (
@@ -115,12 +112,12 @@ function App() {
           No Task....
         </p>
       )}
-     <Todo
-     todo={todo}
-    completedTask={completedTask}
-     setUpdateData={setUpdateData}
-      deleteTask={deleteTask}
-     />
+      <Todo
+        todo={todo}
+        completedTask={completedTask}
+        setUpdateData={setUpdateData}
+        deleteTask={deleteTask}
+      />
     </>
   );
 }
